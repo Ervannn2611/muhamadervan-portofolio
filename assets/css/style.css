@@ -409,6 +409,14 @@ body {
   color: var(--white);
   font-weight: var(--fw-600);
   transition: var(--transition-2);
+  -webkit-border-radius: var(--radius-20);
+  -moz-border-radius: var(--radius-20);
+  -ms-border-radius: var(--radius-20);
+  -o-border-radius: var(--radius-20);
+  -webkit-transition: var(--transition-2);
+  -moz-transition: var(--transition-2);
+  -ms-transition: var(--transition-2);
+  -o-transition: var(--transition-2);
 }
 
 .portfolio-list > li:nth-child(even) .card-content { margin-inline-start: auto; }
@@ -733,12 +741,83 @@ textarea.contact-input {
    * PORTFOLIO
    */
 
-  .portfolio-card {
-    background-size: 115%;
-    padding-inline: 80px;
-  }
 
-  .portfolio-card:is(:hover, :focus) { background-size: 130%; }
+.portfolio-card {
+  position: relative;
+  display: block;
+  background-size: cover;
+  background-position: center;
+  height: 300px;
+  overflow: hidden;
+  border-radius: 12px;
+  text-decoration: none;
+  color: white;
+  -webkit-border-radius: 12px;
+  -moz-border-radius: 12px;
+  -ms-border-radius: 12px;
+  -o-border-radius: 12px;
+}
+/* Tambahkan efek zoom ringan saat hover */
+.portfolio-card:hover {
+  transform: scale(1.03);
+}
+
+/* Overlay hitam */
+.portfolio-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  transition: 0.3s ease;
+  z-index: 1;
+  -webkit-transition: 0.3s ease;
+  -moz-transition: 0.3s ease;
+  -ms-transition: 0.3s ease;
+  -o-transition: 0.3s ease;
+}
+
+.card-content {
+  position: relative;
+  z-index: 2;
+  padding: 150px 40px;
+  transition: 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 100%;
+  -webkit-transition: 0.3s ease;
+  -moz-transition: 0.3s ease;
+  -ms-transition: 0.3s ease;
+  -o-transition: 0.3s ease;
+}
+
+/* Semua teks putih */
+.card-subtitle,
+.card-title,
+.btn-link,
+.btn-link span,
+.btn-link ion-icon {
+  color: white !important;
+}
+
+/* Saat hover, sembunyikan semua kecuali judul */
+.portfolio-card:hover .card-subtitle,
+.portfolio-card:hover .btn-link {
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: 0.3s ease;
+  -webkit-transform: translateY(-10px);
+  -moz-transform: translateY(-10px);
+  -ms-transform: translateY(-10px);
+  -o-transform: translateY(-10px);
+}
+
+/* Judul tetap, turun ke bawah */
+.portfolio-card:hover .card-title {
+  transform: translateY(20px);
+  transition: 0.3s ease;
+}
+
 
 
 
@@ -927,7 +1006,7 @@ textarea.contact-input {
 
   @keyframes rotate360 {
     0% { transform: rotate(0); }
-    100% { transform: rotate(1turn); }
+    100% { transform: rotate(1turn); -webkit-transform: rotate(1turn); -moz-transform: rotate(1turn); -ms-transform: rotate(1turn); -o-transform: rotate(1turn); }
   }
 
 
