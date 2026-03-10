@@ -5,42 +5,255 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script src="https://cdn.emailjs.com/dist/email.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <title>Muhamad Ervan - Portofolio</title>
-
-  <!-- 
-    - favicon
-  -->
-  <link rel="shortcut icon" href="./favicon.svg" type="image/svg+xml">
-
-  <!-- 
-    - custom css link
-  -->
+  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <title>Ervan - Portofolio</title>
+  <link rel="icon" type="image/png" href="/assets/images/logo.png">
   <link rel="stylesheet" href="./assets/css/style.css">
-
-  <!-- 
-    - google font link
-  -->
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
     href="https://fonts.googleapis.com/css2?family=Barlow:wght@600;700&family=Open+Sans:wght@400;500;700&family=Poppins:wght@400;600&display=swap"
     rel="stylesheet">
+
+  <style>
+    .tab-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+
+    .tab-btn {
+      padding: 12px 30px;
+      border: 2px solid var(--action-primary, #007bff);
+      background: transparent;
+      color: var(--black, #000);
+      font-weight: 600;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: all 0.3s ease;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .tab-btn.active,
+    .tab-btn:hover {
+      background: var(--action-primary, #2166f0);
+      color: #fff;
+      border-color: var(--action-primary, #2166f0);
+    }
+
+    .hidden-section {
+      display: none;
+    }
+
+    .fade-in {
+      animation: fadeIn 0.5s;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .portfolio-list {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+      padding: 0;
+      margin-top: 30px;
+    }
+
+    .portfolio-card {
+      height: 400px;
+      width: 100%;
+      border-radius: 12px;
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: flex-end;
+    }
+
+    #certificates-section .portfolio-list {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    #certificates-section .portfolio-card {
+      height: 230px;
+      border-radius: 8px;
+    }
+
+    @media (max-width: 1024px) {
+
+      .portfolio-list,
+      #certificates-section .portfolio-list {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+
+      .portfolio-list,
+      #certificates-section .portfolio-list {
+        grid-template-columns: 1fr;
+      }
+
+      .portfolio-card {
+        height: 350px;
+      }
+
+      #certificates-section .portfolio-card {
+        height: 250px;
+      }
+    }
+
+    .card-content {
+      width: 100%;
+      padding: 20px;
+      color: white !important;
+    }
+
+    .card-content .card-subtitle {
+      color: #ffd700 !important;
+      font-size: 14px;
+      margin-bottom: 5px;
+      font-weight: 600;
+    }
+
+    .card-content .h3 {
+      color: white !important;
+      font-size: 18px;
+      line-height: 1.3;
+      margin-bottom: 10px;
+    }
+
+    /* --- TAMBAHAN DARI SINI: Image Modal Styles --- */
+    .image-modal {
+      display: none;
+      position: fixed;
+      z-index: 9999;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .image-modal.show-modal {
+      display: flex;
+      opacity: 1;
+    }
+
+    .modal-content {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 8px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+      transform: scale(0.8);
+      transition: transform 0.3s ease;
+    }
+
+    .image-modal.show-modal .modal-content {
+      transform: scale(1);
+    }
+
+    .close-modal {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      color: #fff;
+      font-size: 40px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+
+    .close-modal:hover {
+      color: #ccc;
+    }
+
+    .image-modal {
+      display: flex;
+      visibility: hidden;
+      pointer-events: none;
+      position: fixed;
+      z-index: 9999;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      transition: opacity 0.4s ease, visibility 0.4s ease;
+    }
+
+    .image-modal.show-modal {
+      visibility: visible;
+      pointer-events: auto;
+      opacity: 1;
+    }
+
+    .modal-content {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 8px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+
+      transform: scale(0.5) translateY(20px);
+      opacity: 0;
+
+      transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.5s ease;
+    }
+
+    .image-modal.show-modal .modal-content {
+      transform: scale(1) translateY(0);
+      opacity: 1;
+    }
+
+    .close-modal {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      color: #fff;
+      font-size: 40px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: color 0.3s ease, transform 0.3s ease;
+    }
+
+    .close-modal:hover {
+      color: #ff4d4d;
+      transform: scale(1.2) rotate(90deg);
+    }
+  </style>
 </head>
 
 <body id="top">
 
-  <!-- 
-    - #HEADER
-  -->
-
   <header class="header" data-header>
     <div class="container">
-
-      <a href="#">
-        <h1 class="logo">Ervan</h1>
+      <a href="#" class="logo-link">
+        <h1 class="logo">
+          <img src="./assets/images/logo.png" alt="Logo" class="logo-img">
+          Ervan
+        </h1>
       </a>
 
       <button class="nav-toggle-btn" aria-label="Toggle Menu" data-nav-toggle-btn>
@@ -50,443 +263,374 @@
 
       <nav class="navbar container">
         <ul class="navbar-list">
-
-          <li>
-            <a href="#home" class="navbar-link" data-nav-link>Home</a>
-          </li>
-
-          <li>
-            <a href="#about" class="navbar-link" data-nav-link>About</a>
-          </li>
-
-          <li>
-            <a href="#portfolio" class="navbar-link" data-nav-link>Portfolio</a>
-          </li>
-
-          <li>
-            <a href="#skills" class="navbar-link" data-nav-link>Skills</a>
-          </li>
-
-          <li>
-            <a href="#contact" class="navbar-link" data-nav-link>Contact</a>
-          </li>
-
-
-          <a href="./assets/pdf/MuhamadErvan-CV.pdf" class="btn btn-primary" download="MuhamadErvan-CV.pdf">Download CV</a>
-
-
+          <li><a href="#home" class="navbar-link" data-nav-link>Home</a></li>
+          <li><a href="#about" class="navbar-link" data-nav-link>About</a></li>
+          <li><a href="#portfolio" class="navbar-link" data-nav-link>Portfolio</a></li>
+          <li><a href="#skills" class="navbar-link" data-nav-link>Skills</a></li>
+          <li><a href="#contact" class="navbar-link" data-nav-link>Contact</a></li>
+          <li style="margin-top: 10px;"><a href="./assets/pdf/MuhamadErvan-CV.pdf" class="btn btn-primary"
+              download="MuhamadErvan-CV.pdf" data-nav-link>Download CV</a></li>
         </ul>
       </nav>
-
     </div>
   </header>
-
-
-
-
 
   <main>
     <article>
 
-      <!-- 
-        - #HERO
-      -->
-
       <section class="hero" id="home">
         <div class="container">
-
           <div class="hero-banner">
-
-            <img src="./assets/images/09774-removebg-preview.png" width="800" height="864" loading="lazy" alt="Ethan's Photo"
-              class="img-cover">
-
+            <img src="./assets/images/09774-removebg-preview.png" width="800" height="864" loading="lazy"
+              alt="Ethan's Photo" class="img-cover">
             <div class="elem elem-1">
               <p class="elem-title">18</p>
-
               <p class="elem-text">Years old</p>
             </div>
-
             <div class="elem elem-2">
               <p class="elem-title">+</p>
-
               <p class="elem-text">Projects</p>
             </div>
-
             <div class="elem elem-3">
               <ion-icon name="trophy"></ion-icon>
             </div>
-
             <img src="./assets/images/Ervan Rotate.png" width="180" height="190" alt="I'm developer from New York"
               class="rotate-img">
-
           </div>
-
           <div class="hero-content">
-
-           <h2 class="hero-title">
+            <h2 class="hero-title">
               <span>Hello, I’m</span>
               <strong>Muhamad Ervan</strong> Full-Stack Developer
             </h2>
-
             <p class="hero-text">
-              I build end-to-end web applications and enjoy solving real-world problems through clean, logical, and scalable code.
+              I build end-to-end web applications and enjoy solving real-world problems through clean, logical, and
+              scalable code.
             </p>
-
             <div class="btn-group">
               <a href="#contact" class="btn btn-primary blue">Get a Quote</a>
-
               <a href="#about" class="btn">About Me</a>
             </div>
-
           </div>
-
         </div>
       </section>
 
-
-
-
-
-      <!-- 
-        - #ABOUT
-      -->
-
       <section class="section about" id="about">
         <div class="container">
-
           <figure class="about-banner">
-
-            <img src="./assets/images/09774-removebg-preview (1).png" width="800" height="652" loading="lazy" alt="Ethan's Photo"
+            <img src="./assets/images/ervan.png" width="800" height="652" loading="lazy" alt="Ethan's Photo"
               class="img-cover">
-
-            <div class="abs-icon abs-icon-1">
-              <ion-icon name="logo-react"></ion-icon>
-            </div>
-
-            <div class="abs-icon abs-icon-2">
-              <ion-icon name="logo-javascript"></ion-icon>
-            </div>
-
-            <div class="abs-icon abs-icon-3">
-              <ion-icon name="logo-laravel"></ion-icon>
-            </div>
-
+            <div class="abs-icon abs-icon-1"><ion-icon name="logo-react"></ion-icon></div>
+            <div class="abs-icon abs-icon-2"><ion-icon name="logo-javascript"></ion-icon></div>
+            <div class="abs-icon abs-icon-3"><ion-icon name="logo-laravel"></ion-icon></div>
           </figure>
-
           <div class="about-content">
-
             <p class="section-subtitle">Full-Stack Developer</p>
-
             <h2 class="h2 section-title">Crafting End-to-End Web Solutions</h2>
-
             <p class="section-text">
-              I’m a Full-Stack Developer experienced in building complete web applications, from intuitive user interfaces
+              I’m a Full-Stack Developer experienced in building complete web applications, from intuitive user
+              interfaces
               to robust backend systems. Proficient in working with APIs, databases, and modern frameworks such as
               Laravel, Lumen, and React. Passionate about continuous learning and delivering efficient, scalable,
               and user-centered digital solutions.
             </p>
-
             <a href="#portfolio" class="btn btn-primary blue">View My Portfolio</a>
-
           </div>
-
-
         </div>
       </section>
-
-
-
-
-
-      <!-- 
-        - #PORTFOLIO
-      -->
 
       <section class="section portfolio" id="portfolio">
         <div class="container">
 
           <p class="section-subtitle">Portfolio</p>
-
-          <h2 class="h2 section-title">My Works</h2>
-
+          <h2 class="h2 section-title">My Works & Certificates</h2>
           <p class="section-text">
-            A collection of my projects highlighting my experience in web development.
+            A collection of my projects and certifications highlighting my experience.
           </p>
 
-          <ul class="portfolio-list">
+          <div class="tab-buttons">
+            <button class="tab-btn active" onclick="switchTab('works')">My Works</button>
+            <button class="tab-btn" onclick="switchTab('certificates')">My Certificates</button>
+          </div>
 
-             <li>
-            <a href="https://filmislami.kemenag.go.id/" class="portfolio-card" style="background-image: url('./assets/images/filmislami.jpeg')">
-                <div class="card-content">
-
-                  <p class="card-subtitle" style="color: var(--black);">Film Islami</p>
-
-                  <h3 class="h3 card-title" style="color: var(--black);">
-                    Web application for film catalog and content management.
-                  </h3>
-
-                  <span class="btn-link" style="color: var(--black);">
-                    <span>View Project</span>
-                    <ion-icon name="arrow-forward"></ion-icon>
-                  </span>
-
-                </div>
-              </a>
+          <div id="works-section" class="fade-in">
+            <ul class="portfolio-list">
+              <li>
+                <a href="https://filmislami.kemenag.go.id/" class="portfolio-card"
+                  style="background-image: url('./assets/images/filmislami.jpeg')">
+                  <div class="card-content">
+                    <p class="card-subtitle">Film Islami</p>
+                    <h3 class="h3 card-title">Web application for film catalog.</h3>
+                    <span class="btn-link">
+                      <span>View Project</span>
+                      <ion-icon name="arrow-forward"></ion-icon>
+                    </span>
+                  </div>
+                </a>
               </li>
 
-            <li>
-              <a href="https://pdamtirtaagara.com/" class="portfolio-card" style="background-image: url('./assets/images/PDAM.jpg')">
-                <div class="card-content">
+              <li>
+                <a href="https://pdamtirtaagara.com/" class="portfolio-card"
+                  style="background-image: url('./assets/images/PDAM.jpg')">
+                  <div class="card-content">
+                    <p class="card-subtitle">PDAM Tirta Agara</p>
+                    <h3 class="h3 card-title">Billing management web app.</h3>
+                    <span class="btn-link">
+                      <span>View Project</span>
+                      <ion-icon name="arrow-forward"></ion-icon>
+                    </span>
+                  </div>
+                </a>
+              </li>
 
-                  <p class="card-subtitle" style="color: var(--black);">PDAM Tirta Agara</p>
+              <li>
+                <a href="#" class="portfolio-card" style="background-image: url('./assets/images/sekolah.jpeg')">
+                  <div class="card-content">
+                    <p class="card-subtitle">Aspirasi Sekolah</p>
+                    <h3 class="h3 card-title">School Facility Reporter</h3>
+                    <span class="btn-link">
+                      <span>View Project</span>
+                      <ion-icon name="arrow-forward"></ion-icon>
+                    </span>
+                  </div>
+                </a>
+              </li>
 
-                  <h3 class="h3 card-title" style="color: var(--black);">A web app for efficient employee and billing management.</h3>
+              <li>
+                <a href="https://kelurahan-melawai.com/" class="portfolio-card"
+                  style="background-image: url('./assets/images/E-waris.png')">
+                  <div class="card-content">
+                    <p class="card-subtitle">E-Warris</p>
+                    <h3 class="h3 card-title">Village & inheritance app.</h3>
+                    <span class="btn-link">
+                      <span>View Project</span>
+                      <ion-icon name="arrow-forward"></ion-icon>
+                    </span>
+                  </div>
+                </a>
+              </li>
 
-                  <span class="btn-link" style="color: var(--black);">
-                    <span>View Project</span>
+              <li>
+                <a href="#" class="portfolio-card" style="background-image: url('./assets/images/grab.jpeg')">
+                  <div class="card-content">
+                    <p class="card-subtitle">Grab Sticker Campaign</p>
+                    <h3 class="h3 card-title">Village & inheritance app.</h3>
+                    <span class="btn-link">
+                      <span>View Project</span>
+                      <ion-icon name="arrow-forward"></ion-icon>
+                    </span>
+                  </div>
+                </a>
+              </li>
 
-                    <ion-icon name="arrow-forward"></ion-icon>
-                  </span>
+              <li>
+                <a href="https://muhamadervan-portofolio.vercel.app/" class="portfolio-card"
+                  style="background-image: url('./assets/images/porto.png')">
+                  <div class="card-content">
+                    <p class="card-subtitle">Portofolio</p>
+                    <h3 class="h3 card-title">Personal Web</h3>
+                    <span class="btn-link">
+                      <span>View Project</span>
+                      <ion-icon name="arrow-forward"></ion-icon>
+                    </span>
+                  </div>
+                </a>
+              </li>
+            </ul>
+          </div>
 
-                </div>
-              </a>
-            </li>
-
-            <li>
-              <a href="#" class="portfolio-card" style="background-image: url('./assets/images/Perpustakaan.png')">
-                <div class="card-content">
-
-                  <p class="card-subtitle" style="color: var(--black);">Library App</p>
-
-                  <h3 class="h3 card-title" style="color: var(--black);">A modern library app to manage books, members, loans, and fines.</h3>
-
-                  <span class="btn-link" style="color: var(--black);">
-                    <span >View Project</span>
-
-                    <ion-icon name="arrow-forward" style="color: var(--black);"></ion-icon>
-                  </span>
-
-                </div>
-              </a>
-            </li>
-
-            <li>
-              <a href="https://kelurahan-melawai.com/" class="portfolio-card" style="background-image: url('./assets/images/E-waris.png')">
-                <div class="card-content">
-
-                  <p class="card-subtitle" style="color: var(--black);">E-Warris</p>
-
-                  <h3 class="h3 card-title" style="color: var(--black);">Village management application and inheritance letter</h3>
-
-                  <span class="btn-link" style="color: var(--black);">
-                    <span>View Project</span>
-
-                    <ion-icon name="arrow-forward"></ion-icon>
-                  </span>
-
-                </div>
-              </a>
-            </li>
-
-            <li>
-              <a href="https://muhamadervan-portofolio.vercel.app/" class="portfolio-card" style="background-image: url('./assets/images/porto.png')">
-                <div class="card-content" style="transform: translateY(-20px);">
-
-                  <p class="card-subtitle" style="color: var(--black);">Portofolio</p>
-
-                  <h3 class="h3 card-title" style="color: var(--black);">Personal Web</h3>
-
-                  <span class="btn-link" style="color: var(--black);">
-                    <span>View Project</span>
-
-                    <ion-icon name="arrow-forward"></ion-icon>
-                  </span>
-
-                </div>
-              </a>
-            </li>
-
-          </ul>
+          <div id="certificates-section" class="hidden-section fade-in">
+            <ul class="portfolio-list">
+              <li>
+                <a href="#" class="portfolio-card" style="background-image: url('./assets/images/dasar.jpeg')">
+                </a>
+              </li>
+              <li>
+                <a href="#" class="portfolio-card" style="background-image: url('./assets/images/ai.jpeg')">
+                </a>
+              </li>
+              <li>
+                <a href="#" class="portfolio-card" style="background-image: url('./assets/images/java.jpeg')">
+                </a>
+              </li>
+              <li>
+                <a href="#" class="portfolio-card" style="background-image: url('./assets/images/solid.jpeg')">
+                </a>
+              </li>
+              <li>
+                <a href="#" class="portfolio-card" style="background-image: url('./assets/images/git.jpeg')">
+                </a>
+              </li>
+              <li>
+                <a href="#" class="portfolio-card" style="background-image: url('./assets/images/fe.jpeg')">
+                </a>
+              </li>
+              <li>
+                <a href="#" class="portfolio-card" style="background-image: url('./assets/images/be.jpeg')">
+                </a>
+              </li>
+               <li>
+                <a href="#" class="portfolio-card" style="background-image: url('./assets/images/samsung.jpeg')">
+                </a>
+              </li>
+               <li>
+                <a href="#" class="portfolio-card" style="background-image: url('./assets/images/problem-solv.jpeg')">
+                </a>
+              </li>
+            </ul>
+          </div>
 
         </div>
       </section>
 
-
-
-
-
-      <!-- 
-        - #SKILLS
-      -->
-
       <section class="section skills" id="skills">
         <div class="container">
-
           <p class="section-subtitle">My Skills</p>
-
           <h2 class="h2 section-title">I Develop Skills Regularly</h2>
+          <p class="section-text">I constantly learn new tools to sharpen my development skills.</p>
 
-          <p class="section-text">
-              I constantly learn new tools to sharpen my development skills.
-          </p>
-
-
-<ul class="skills-list">
-
-  <li class="skills-item">
-    <div class="wrapper" style="width: 80%">
-      <h3 class="skills-title">PHP</h3>
-      <data class="skills-data" value="80"></data>
-    </div>
-    <div class="skills-progress-box">
-      <div class="skills-progress" style="width: 80%"></div>
-    </div>
-  </li>
-
-  <li class="skills-item">
-    <div class="wrapper" style="width: 75%">
-      <h3 class="skills-title">Laravel</h3>
-      <data class="skills-data" value="75"></data>
-    </div>
-    <div class="skills-progress-box">
-      <div class="skills-progress" style="width: 75%"></div>
-    </div>
-  </li>
-
-  <li class="skills-item">
-    <div class="wrapper" style="width: 70%">
-      <h3 class="skills-title">JavaScript</h3>
-      <data class="skills-data" value="70"></data>
-    </div>
-    <div class="skills-progress-box">
-      <div class="skills-progress" style="width: 70%"></div>
-    </div>
-  </li>
-
-  <li class="skills-item">
-    <div class="wrapper" style="width: 70%">
-      <h3 class="skills-title">ReactJS</h3>
-      <data class="skills-data" value="70"></data>
-    </div>
-    <div class="skills-progress-box">
-      <div class="skills-progress" style="width: 70%"></div>
-    </div>
-  </li>
-
-  <li class="skills-item">
-    <div class="wrapper" style="width: 70%">
-      <h3 class="skills-title">Tailwind CSS</h3>
-      <data class="skills-data" value="70"></data>
-    </div>
-    <div class="skills-progress-box">
-      <div class="skills-progress" style="width: 70%"></div>
-    </div>
-  </li>
-
-  <li class="skills-item">
-    <div class="wrapper" style="width: 75%">
-      <h3 class="skills-title">MySQL & PostgreSQL</h3>
-      <data class="skills-data" value="75"></data>
-    </div>
-    <div class="skills-progress-box">
-      <div class="skills-progress" style="width: 75%"></div>
-    </div>
-  </li>
-
-</ul>
-
-
-
-</div>
-</section>
-
-
-
-
-
-      <!-- 
-        - #CONTACT
-      -->
-
-<section class="section contact" id="contact">
-  <div class="container">
-    <div class="contact-card">
-
-      <p class="card-subtitle">Don't be shy</p>
-      <h2 class="h2 section-title">Drop Me a Line</h2>
-
-      <div class="wrapper">
-
-        <!-- GANTI ID dari 'contact' ke 'contact-form' -->
-        <form action="" id="contact-form" class="contact-form">
-          <input type="text" name="name" placeholder="Name" required class="contact-input">
-          <input type="email" name="email" placeholder="Email" required class="contact-input">
-          <textarea name="message" placeholder="Message" required class="contact-input"></textarea>
-          <button type="submit" class="btn-submit">Submit Message</button>
-        </form>
-
-        <ul class="contact-list">
-          <li class="contact-item">
-            <div class="contact-icon"><ion-icon name="location"></ion-icon></div>
-            <div>
-              <h3 class="contact-item-title">Address</h3>
-              <address class="contact-item-link">Bogor, Indonesia</address>
-            </div>
-          </li>
-
-          <li class="contact-item">
-              <div class="contact-icon">
-                <ion-icon name="mail"></ion-icon>
+          <ul class="skills-list">
+            <li class="skills-item">
+              <div class="wrapper" style="width: 80%">
+                <h3 class="skills-title">PHP</h3>
+                <data class="skills-data" value="80"></data>
               </div>
-
-              <div class="contact-info">
-                <h3 class="contact-item-title">Email</h3>
-                <a href="mailto:muhammadevan2611@gmail.com" class="contact-item-link">
-                  muhammadevan2611@gmail.com
-                </a>
+              <div class="skills-progress-box">
+                <div class="skills-progress" style="width: 80%"></div>
               </div>
             </li>
+            <li class="skills-item">
+              <div class="wrapper" style="width: 75%">
+                <h3 class="skills-title">Laravel</h3>
+                <data class="skills-data" value="75"></data>
+              </div>
+              <div class="skills-progress-box">
+                <div class="skills-progress" style="width: 75%"></div>
+              </div>
+            </li>
+            <li class="skills-item">
+              <div class="wrapper" style="width: 70%">
+                <h3 class="skills-title">JavaScript</h3>
+                <data class="skills-data" value="70"></data>
+              </div>
+              <div class="skills-progress-box">
+                <div class="skills-progress" style="width: 70%"></div>
+              </div>
+            </li>
+            <li class="skills-item">
+              <div class="wrapper" style="width: 70%">
+                <h3 class="skills-title">ReactJS</h3>
+                <data class="skills-data" value="70"></data>
+              </div>
+              <div class="skills-progress-box">
+                <div class="skills-progress" style="width: 70%"></div>
+              </div>
+            </li>
+            <li class="skills-item">
+              <div class="wrapper" style="width: 70%">
+                <h3 class="skills-title">Tailwind CSS</h3>
+                <data class="skills-data" value="70"></data>
+              </div>
+              <div class="skills-progress-box">
+                <div class="skills-progress" style="width: 70%"></div>
+              </div>
+            </li>
+            <li class="skills-item">
+              <div class="wrapper" style="width: 75%">
+                <h3 class="skills-title">MySQL & PostgreSQL</h3>
+                <data class="skills-data" value="75"></data>
+              </div>
+              <div class="skills-progress-box">
+                <div class="skills-progress" style="width: 75%"></div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </section>
 
-
-          <li class="contact-item">
-            <div class="contact-icon"><ion-icon name="call"></ion-icon></div>
-            <div>
-              <h3 class="contact-item-title">Phone</h3>
-              <a href="tel:+628985782902" class="contact-item-link">+62 898 5782 902</a>
+      <section class="section contact" id="contact">
+        <div class="container">
+          <div class="contact-card">
+            <p class="card-subtitle">Don't be shy</p>
+            <h2 class="h2 section-title">Drop Me a Line</h2>
+            <div class="wrapper">
+              <form action="" id="contact-form" class="contact-form">
+                <input type="text" name="name" placeholder="Name" required class="contact-input">
+                <input type="email" name="email" placeholder="Email" required class="contact-input">
+                <textarea name="message" placeholder="Message" required class="contact-input"></textarea>
+                <button type="submit" class="btn-submit">Submit Message</button>
+              </form>
+              <ul class="contact-list">
+                <li class="contact-item">
+                  <div class="contact-icon"><ion-icon name="location"></ion-icon></div>
+                  <div>
+                    <h3 class="contact-item-title">Address</h3>
+                    <address class="contact-item-link">Bogor, Indonesia</address>
+                  </div>
+                </li>
+                <li class="contact-item">
+                  <div class="contact-icon"><ion-icon name="mail"></ion-icon></div>
+                  <div class="contact-info">
+                    <h3 class="contact-item-title">Email</h3>
+                    <a href="mailto:muhammadevan2611@gmail.com" class="contact-item-link">muhammadevan2611@gmail.com</a>
+                  </div>
+                </li>
+                <li class="contact-item">
+                  <div class="contact-icon"><ion-icon name="call"></ion-icon></div>
+                  <div>
+                    <h3 class="contact-item-title">Phone</h3>
+                    <a href="tel:+628985782902" class="contact-item-link">+62 898 5782 902</a>
+                  </div>
+                </li>
+              </ul>
             </div>
-          </li>
-        </ul>
+          </div>
+        </div>
+      </section>
 
+      <footer class="footer">
+        <div class="container">
+          <p class="copyright">
+            &copy; 2025 <a href="#" class="copyright-link">muhamadervan</a>. All Rights Reserved
+          </p>
+          <ul class="footer-list">
+            <li><a href="#" class="footer-link">Terms & Condition</a></li>
+            <li><a href="#" class="footer-link">Privacy Policy</a></li>
+          </ul>
+        </div>
+      </footer>
+
+      <a href="#top" class="back-to-top" data-back-to-top>BACK TOP</a>
+
+      <div id="image-modal" class="image-modal">
+        <span class="close-modal">&times;</span>
+        <img class="modal-content" id="modal-img">
       </div>
-    </div>
-  </div>
-</section>
+      <script src="./assets/js/script.js"></script>
+      <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+      <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+      <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 
-<footer class="footer">
-  <div class="container">
-    <p class="copyright">
-      &copy; 2025 <a href="#" class="copyright-link">muhamadervan</a>. All Rights Reserved
-    </p>
-    <ul class="footer-list">
-      <li><a href="#" class="footer-link">Terms & Condition</a></li>
-      <li><a href="#" class="footer-link">Privacy Policy</a></li>
-    </ul>
-  </div>
-</footer>
+      <script>
+        function switchTab(tabName) {
+          const worksSection = document.getElementById('works-section');
+          const certSection = document.getElementById('certificates-section');
+          const buttons = document.querySelectorAll('.tab-btn');
 
-<a href="#top" class="back-to-top" data-back-to-top>BACK TOP</a>
+          if (tabName === 'works') {
+            worksSection.style.display = 'block';
+            certSection.style.display = 'none';
+            buttons[0].classList.add('active');
+            buttons[1].classList.remove('active');
+          } else {
+            worksSection.style.display = 'none';
+            certSection.style.display = 'block';
+            buttons[0].classList.remove('active');
+            buttons[1].classList.add('active');
+          }
+        }
+      </script>
 
-<!-- SCRIPT -->
-<script src="./assets/js/script.js"></script>
-<!-- EmailJS SDK -->
-<script src="https://cdn.emailjs.com/dist/email.min.js"></script>
-<!-- Ionicons -->
-<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
-<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
-
-
+  </main>
 </body>
 
 </html>
-<!-- EmailJS SDK -->
-
