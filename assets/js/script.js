@@ -6,9 +6,10 @@
 const header = document.querySelector("[data-header]");
 const navToggleBtn = document.querySelector("[data-nav-toggle-btn]");
 
-navToggleBtn.addEventListener("click", function () {
+navToggleBtn.addEventListener("click", function (e) {
+  e.stopPropagation(); // prevent bubbling if needed
   header.classList.toggle("nav-active");
-  this.classList.toggle("active");
+  navToggleBtn.classList.toggle("active");
 });
 
 /**
@@ -18,10 +19,18 @@ const navbarLinks = document.querySelectorAll("[data-nav-link]");
 
 for (let i = 0; i < navbarLinks.length; i++) {
   navbarLinks[i].addEventListener("click", function () {
-    header.classList.toggle("nav-active");
-    navToggleBtn.classList.toggle("active");
+    header.classList.remove("nav-active"); // intentionally just remove to always close on link click
+    navToggleBtn.classList.remove("active");
   });
 }
+
+document.addEventListener("click", function (e) {
+  // close nav if clicked outside header
+  if (!header.contains(e.target) && header.classList.contains("nav-active")) {
+    header.classList.remove("nav-active");
+    navToggleBtn.classList.remove("active");
+  }
+});
 
 /**
  * back to top & header
@@ -72,7 +81,45 @@ document.addEventListener("DOMContentLoaded", function () {
     console.error("Form dengan ID 'contact-form' tidak ditemukan.");
   }
 });
-/**
- * Preloader
- */
 
+
+const modal = document.getElementById("image-modal");
+const modalImg = document.getElementById("modal-img");
+const closeModalBtn = document.querySelector(".close-modal");
+
+const portfolioCards = document.querySelectorAll(".portfolio-card");
+
+if (modal && modalImg && portfolioCards) {
+  portfolioCards.forEach(card => {
+    card.addEventListener("click", function(e) {
+      const linkHref = this.getAttribute("href");
+      
+      if(linkHref === "#") {
+        e.preventDefault(); 
+        
+        const bgImage = this.style.backgroundImage;
+        const urlRegex = /url\(["']?(.*?)["']?\)/;
+        const match = bgImage.match(urlRegex);
+
+        if (match && match[1]) {
+          modalImg.src = match[1]; 
+          modal.classList.add("show-modal"); 
+        }
+      }
+    });
+  });
+
+  // Tutup modal ketika tombol 'X' diklik
+  if (closeModalBtn) {
+    closeModalBtn.addEventListener("click", () => {
+      modal.classList.remove("show-modal");
+    });
+  }
+
+  // Tutup modal ketika area hitam diklik
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) {
+      modal.classList.remove("show-modal");
+    }
+  });
+}
